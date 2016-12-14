@@ -16,6 +16,11 @@ class QueryRequest {
 
 public class API {
     public static void main(String[] args) {
+        String port = System.getenv("PORT");
+        if (port != null) {
+            port(Integer.valueOf(port));
+        }
+
         Gson gson = new Gson();
         post("/query", API::queryRequest, gson::toJson);
         get("/ping", (req, res) -> "PONG");
