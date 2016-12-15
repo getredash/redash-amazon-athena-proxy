@@ -1,0 +1,21 @@
+machine:
+  services:
+    - docker
+  java:
+    version: openjdk8
+test:
+  post:
+    - mvn -B -DskipTests clean dependency:list install
+    - cp ./target/athenaproxy-*-jar-with-dependencies.jar $CIRCLE_ARTIFACTS/
+deployment:
+  docker:
+    branch: master
+    commands:
+      - echo 1
+      # Skipping uploads for now, until master is stable.
+      # - make upload
+      #- echo "client/app" >> .dockerignore
+      #- docker pull redash/redash:latest
+      #- docker build -t redash/redash:$(./manage.py version | sed -e "s/\+/./") .
+      #- docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      #- docker push redash/redash:$(./manage.py version | sed -e "s/\+/./")
