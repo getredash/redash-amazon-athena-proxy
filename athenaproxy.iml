@@ -21,15 +21,7 @@
         <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Maven: com.amazonaws:athena:1.0">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/AthenaJDBC41-1.0.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="Maven: com.amazonaws:athena:1.0" level="project" />
     <orderEntry type="library" name="Maven: com.sparkjava:spark-core:2.5.3" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.13" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-server:9.3.6.v20151106" level="project" />
