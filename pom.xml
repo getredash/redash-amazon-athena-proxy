@@ -7,6 +7,15 @@
     <groupId>io.redash</groupId>
     <artifactId>athenaproxy</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <repositories>
+        <repository>
+            <id>project.local</id>
+            <name>project</name>
+            <url>file:${project.basedir}/repo</url>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
             <plugin>
@@ -47,8 +56,6 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>athena</artifactId>
             <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/AthenaJDBC41-1.0.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.sparkjava</groupId>
