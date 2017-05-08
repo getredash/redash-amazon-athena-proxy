@@ -1,5 +1,8 @@
 package com.getredash.awsathena_proxy;
 
+import com.amazonaws.athena.jdbc.AthenaProvidedResultsClient;
+import com.amazonaws.athena.jdbc.AthenaServiceClient;
+import com.amazonaws.athena.jdbc.AthenaStatementClient;
 import com.amazonaws.athena.jdbc.shaded.com.amazonaws.services.athena.model.InvalidRequestException;
 import com.google.gson.annotations.SerializedName;
 import org.slf4j.Logger;
@@ -7,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.*;
+
+import com.amazonaws.athena.jdbc.AthenaResultSet;
 
 class Column {
     String type;
@@ -75,11 +80,11 @@ public class Athena {
             this.logger.info("Running query for {}.", this.info.get("user"));
 
             long startTime = System.nanoTime();
-            ResultSet rs = statement.executeQuery(query);
+            AthenaResultSet rs = (AthenaResultSet) statement.executeQuery(query);
+            Object queryId = ((AthenaStatementClient)rs.getClient()).getQueryExecutionId();
             long duration = (System.nanoTime() - startTime)/1000000;
 
-            this.logger.info("Finished running query for {} in {}ms.", this.info.get("user"), duration);
-
+            this.logger.info("Finished running query ({}) for {} in {}ms.", queryId, this.info.get("user"), duration);
 
             ResultSetMetaData metadata = rs.getMetaData();
 
