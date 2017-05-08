@@ -1,6 +1,7 @@
 package com.getredash.awsathena_proxy;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import spark.Request;
 import spark.Response;
 
@@ -23,7 +24,8 @@ public class API {
             port(Integer.valueOf(port));
         }
 
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssX").create();
+
         post("/query", API::queryRequest, gson::toJson);
         get("/ping", (req, res) -> "PONG");
     }

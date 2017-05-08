@@ -49,8 +49,8 @@ public class Athena {
         typesMap.put(Types.VARCHAR, "string");
         typesMap.put(Types.NVARCHAR, "string");
         typesMap.put(Types.DATE, "date");
-        typesMap.put(Types.TIME, "date");
-        typesMap.put(Types.TIMESTAMP, "date");
+        typesMap.put(Types.TIME, "datetime");
+        typesMap.put(Types.TIMESTAMP, "datetime");
     }
 
     public Athena(String athenaUrl, String awsAccessKey, String awsSecretKey, String s3StagingDir) {
