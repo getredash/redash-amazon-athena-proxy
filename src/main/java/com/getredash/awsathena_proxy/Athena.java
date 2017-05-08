@@ -1,10 +1,17 @@
 package com.getredash.awsathena_proxy;
 
+import com.amazonaws.athena.jdbc.AthenaProvidedResultsClient;
+import com.amazonaws.athena.jdbc.AthenaServiceClient;
+import com.amazonaws.athena.jdbc.AthenaStatementClient;
 import com.amazonaws.athena.jdbc.shaded.com.amazonaws.services.athena.model.InvalidRequestException;
 import com.google.gson.annotations.SerializedName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.*;
+
+import com.amazonaws.athena.jdbc.AthenaResultSet;
 
 class Column {
     String type;
@@ -30,6 +37,8 @@ class Results {
 }
 
 public class Athena {
+    final Logger logger = LoggerFactory.getLogger(Athena.class);
+
     private Properties info;
     private String athenaUrl;
 
@@ -45,8 +54,8 @@ public class Athena {
         typesMap.put(Types.VARCHAR, "string");
         typesMap.put(Types.NVARCHAR, "string");
         typesMap.put(Types.DATE, "date");
-        typesMap.put(Types.TIME, "date");
-        typesMap.put(Types.TIMESTAMP, "date");
+        typesMap.put(Types.TIME, "datetime");
+        typesMap.put(Types.TIMESTAMP, "datetime");
     }
 
     public Athena(String athenaUrl, String awsAccessKey, String awsSecretKey, String s3StagingDir) {
@@ -67,7 +76,16 @@ public class Athena {
             conn = DriverManager.getConnection(this.athenaUrl, this.info);
 
             statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery(query);
+
+            this.logger.info("Running query for {}.", this.info.get("user"));
+
+            long startTime = System.nanoTime();
+            AthenaResultSet rs = (AthenaResultSet) statement.executeQuery(query);
+            Object queryId = ((AthenaStatementClient)rs.getClient()).getQueryExecutionId();
+            long duration = (System.nanoTime() - startTime)/1000000;
+
+            this.logger.info("Finished running query ({}) for {} in {}ms.", queryId, this.info.get("user"), duration);
+
             ResultSetMetaData metadata = rs.getMetaData();
 
             List<Column> columns = new ArrayList<Column>();
